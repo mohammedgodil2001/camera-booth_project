@@ -1853,6 +1853,11 @@ export default function HomeScreen() {
     }
   };
 
+  const navigateToCustomize = () => {
+    // Go to customize screen first
+    router.push('/customize');
+  };
+
   const takePhoto = async () => {
     // Double check we're not exceeding limit
     if (!canAddMore()) {
@@ -1970,6 +1975,22 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </>
       )}
+
+       <TouchableOpacity
+          style={[
+            styles.continueButton,
+            capturedImages.length === 0 ? styles.continueButtonDisabled : null
+          ]}
+          onPress={navigateToCustomize}
+          disabled={capturedImages.length === 0}
+        >
+          <Text style={[
+            styles.continueButtonText,
+            capturedImages.length === 0 ? styles.continueButtonTextDisabled : null
+          ]}>
+            Customize with {capturedImages.length} photo{capturedImages.length !== 1 ? 's' : ''}
+          </Text>
+        </TouchableOpacity>
 
       {/* Camera Modal */}
       <Modal
@@ -2089,6 +2110,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
     backgroundColor: '#f5f5f5',
+  },
+  continueButton: {
+    backgroundColor: '#8B7355',
+    paddingHorizontal: 30,
+    paddingVertical: 15,
+    borderRadius: 25,
+    minWidth: 250,
+    alignItems: 'center',
+  },
+  continueButtonDisabled: {
+    backgroundColor: '#ccc',
+  },
+  continueButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  continueButtonTextDisabled: {
+    color: '#999',
   },
   title: {
     fontSize: 28,
