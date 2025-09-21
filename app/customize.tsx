@@ -16,6 +16,7 @@ interface CustomizationOptions {
   stripColor: string;
   backgroundColor: string;
   showDateStamp: boolean;
+  blackAndWhite: boolean;
   customText: string;
 }
 
@@ -23,9 +24,10 @@ export default function CustomizeScreen() {
   const { capturedImages } = usePhotos();
   
   const [customization, setCustomization] = useState<CustomizationOptions>({
-    stripColor: '#8B7355', // brown (default)
-    backgroundColor: '#f5f5f0', // cream (default)
+    stripColor: '#8B7355', 
+    backgroundColor: '#f5f5f0', 
     showDateStamp: true,
+    blackAndWhite: true,
     customText: ''
   });
 
@@ -65,7 +67,8 @@ export default function CustomizeScreen() {
         stripColor: customization.stripColor,
         backgroundColor: customization.backgroundColor,
         showDateStamp: customization.showDateStamp.toString(),
-        customText: customization.customText
+        customText: customization.customText,
+        blackAndWhite: customization.blackAndWhite.toString()
       }
     });
   };
@@ -184,8 +187,28 @@ export default function CustomizeScreen() {
         </View>
       </View>
 
+      <View>
+        {/* Black & White Toggle */}
+        <View style={styles.sectionContainer}>
+          <View style={styles.toggleContainer}>
+            <View style={styles.toggleTextContainer}>
+              <Text style={styles.sectionTitle}>Black & White</Text>
+              <Text style={styles.toggleDescription}>
+                Apply a classic black and white filter to your photos
+              </Text>
+            </View>
+            <Switch
+              value={customization.blackAndWhite}
+              onValueChange={() => setCustomization(prev => ({ ...prev, blackAndWhite: !prev.blackAndWhite }))}
+              trackColor={{ false: '#ccc', true: customization.stripColor }}
+              thumbColor="#fff"
+            />
+          </View>
+        </View>
+      </View>
+
       {/* Preview Section */}
-      <View style={styles.previewContainer}>
+      {/* <View style={styles.previewContainer}>
         <Text style={styles.previewTitle}>Preview</Text>
         <View style={[styles.miniPreview, { backgroundColor: customization.backgroundColor }]}>
           <View style={[styles.miniStrip, { backgroundColor: customization.stripColor }]}>
@@ -204,7 +227,7 @@ export default function CustomizeScreen() {
             ))}
           </View>
         </View>
-      </View>
+      </View> */}
 
       {/* Continue Button */}
       <TouchableOpacity
