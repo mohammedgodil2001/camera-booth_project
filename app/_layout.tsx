@@ -1,19 +1,43 @@
-// import { Stack } from "expo-router";
+// import { Stack } from 'expo-router';
+// import { PhotoProvider } from '../contexts/PhotoContext';
 
 // export default function RootLayout() {
-//   return <Stack />;
+//   return (
+//     <PhotoProvider>
+//       <Stack>
+//         <Stack.Screen name="index" options={{ title: 'Home', headerShown: false }} />
+//         <Stack.Screen name="upload" options={{ title: 'Upload', headerShown: false }} />
+//         <Stack.Screen name="customize" options={{ title: 'Customize', headerShown: false }} />
+//         <Stack.Screen name="preview" options={{ title: 'Preview', headerShown: false }} />
+//       </Stack>
+//     </PhotoProvider>
+//   );
 // }
 
-
-
-// app/_layout.tsx
-
-
-// app/_layout.tsx
+import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
-import { PhotoProvider } from '../contexts/PhotoContext'; // Adjust this path to where you put the context file
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from 'react';
+import { PhotoProvider } from '../contexts/PhotoContext';
+
+// Keep splash screen visible while loading fonts
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const [fontsLoaded] = useFonts({
+    'grotesk': require('../assets/images/fonts/HelveticaNeue-Roman.otf'),
+  });
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <PhotoProvider>
       <Stack>

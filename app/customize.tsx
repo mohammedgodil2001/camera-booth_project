@@ -31,7 +31,7 @@ export default function CustomizeScreen() {
     customText: ''
   });
 
-  // Color options for photostrip
+  
   const stripColors = [
     { color: '#8B7355', name: 'Brown' },
     { color: '#9B7CB6', name: 'Purple' },
