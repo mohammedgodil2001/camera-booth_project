@@ -1,19 +1,23 @@
-import React from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  TouchableOpacity, 
-  Image, 
-  ScrollView,
-  Alert 
-} from 'react-native';
+import * as MediaLibrary from 'expo-media-library';
 import { router, useLocalSearchParams } from 'expo-router';
+import React, { useRef, useState } from 'react';
+import {
+    Alert,
+    Image,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from 'react-native';
+import ViewShot from 'react-native-view-shot';
 import { usePhotos } from '../contexts/PhotoContext';
 
 export default function PreviewScreen() {
   const { capturedImages } = usePhotos();
   const params = useLocalSearchParams();
+  const viewShotRef = useRef<ViewShot>(null);
+  const [isSaving, setIsSaving] = useState(false);
   
   const stripColor = params.stripColor as string || '#8B7355';
   const backgroundColor = params.backgroundColor as string || '#f5f5f0';
@@ -24,12 +28,59 @@ export default function PreviewScreen() {
     router.back();
   };
 
-  const sharePhotostrip = () => {
-    Alert.alert(
-      'Share Photostrip',
-      'Photostrip saved! You can now share it with friends.',
-      [{ text: 'OK' }]
-    );
+  const requestPermissions = async () => {
+    const { status } = await MediaLibrary.requestPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert(
+        'Permission Required',
+        'Please grant permission to save photos to your gallery.',
+        [{ text: 'OK' }]
+      );
+      return false;
+    }
+    return true;
+  };
+
+  const saveToGallery = async () => {
+    if (isSaving) return;
+    
+    setIsSaving(true);
+    
+    try {
+      // Request permissions first
+      const hasPermission = await requestPermissions();
+      if (!hasPermission) {
+        setIsSaving(false);
+        return;
+      }
+
+      // Capture the photostrip view
+      const uri = await viewShotRef.current?.capture();
+      
+      if (uri) {
+        // Save to gallery
+        const asset = await MediaLibrary.saveToLibraryAsync(uri);
+        
+        Alert.alert(
+          'Success!',
+          'Your photostrip has been saved to your gallery.',
+          [
+            { text: 'OK' },
+          ]
+        );
+      } else {
+        throw new Error('Failed to capture image');
+      }
+    } catch (error) {
+      console.error('Error saving photostrip:', error);
+      Alert.alert(
+        'Error',
+        'Failed to save photostrip. Please try again.',
+        [{ text: 'OK' }]
+      );
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const getCurrentDate = () => {
@@ -55,54 +106,64 @@ export default function PreviewScreen() {
       {/* Photostrip Container */}
       <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         <View style={styles.photostripContainer}>
-          <View style={[styles.photostrip, { backgroundColor: stripColor }]}>
-            
-            {/* Header Section with Text and Date */}
-            <View style={styles.stripHeader}>
-              <Text style={styles.customText}>{customText}</Text>
-              {showDateStamp && (
-                <Text style={styles.dateText}>{getCurrentDate()}</Text>
-              )}
-            </View>
-
-            {/* Photos Section */}
-            <View style={styles.photosContainer}>
-              {capturedImages.map((imageUri, index) => (
-                <View key={index} style={styles.photoFrame}>
-                  <View style={styles.bwImageContainer}>
-                    <Image 
-                      source={{ uri: imageUri }} 
-                      style={styles.photostripImage}
-                      resizeMode="cover"
-                    />
-                    <View style={styles.grayscaleOverlay} />
-                  </View>
-                </View>
-              ))}
+          
+          {/* This ViewShot wrapper captures everything inside it */}
+          <ViewShot 
+            ref={viewShotRef}
+            options={{
+              format: 'jpg',
+              quality: 0.9,
+              result: 'tmpfile',
+            }}
+            style={styles.viewShotContainer}
+          >
+            <View style={[styles.photostrip, { backgroundColor: stripColor }]}>
               
-              {/* Fill empty slots if less than 3 photos */}
-              {Array.from({ length: Math.max(0, 3 - capturedImages.length) }).map((_, index) => (
-                <View key={`empty-${index}`} style={styles.photoFrame}>
-                  <View style={styles.emptyPhoto}>
-                    <Text style={styles.emptyPhotoText}>No Photo</Text>
+              {/* Header Section with Text and Date */}
+              <View style={styles.stripHeader}>
+                <Text style={styles.customText}>{customText}</Text>
+                {showDateStamp && (
+                  <Text style={styles.dateText}>{getCurrentDate()}</Text>
+                )}
+              </View>
+
+              {/* Photos Section */}
+              <View style={styles.photosContainer}>
+                {capturedImages.map((imageUri, index) => (
+                  <View key={index} style={styles.photoFrame}>
+                    <View style={styles.bwImageContainer}>
+                      <Image 
+                        source={{ uri: imageUri }} 
+                        style={styles.photostripImage}
+                        resizeMode="cover"
+                      />
+                      <View style={styles.grayscaleOverlay} />
+                    </View>
                   </View>
-                </View>
-              ))}
-            </View>
+                ))}
+              </View>
 
-            {/* Footer */}
-            <View style={styles.stripFooter}>
-              <View style={styles.stripFooterLine} />
+              {/* Footer */}
+              <View style={styles.stripFooter}>
+                <View style={styles.stripFooterLine} />
+              </View>
             </View>
-          </View>
+          </ViewShot>
 
-          {/* Action Buttons */}
+          {/* Action Buttons - Outside of ViewShot so they don't get captured */}
           <View style={styles.actionButtonsContainer}>
             <TouchableOpacity
-              style={[styles.actionButton, { backgroundColor: stripColor }]}
-              onPress={sharePhotostrip}
+              style={[
+                styles.actionButton, 
+                { backgroundColor: stripColor },
+                isSaving && styles.actionButtonDisabled
+              ]}
+              onPress={saveToGallery}
+              disabled={isSaving}
             >
-              <Text style={styles.actionButtonText}>Save & Share</Text>
+              <Text style={styles.actionButtonText}>
+                {isSaving ? 'Saving...' : 'Save & Share'}
+              </Text>
             </TouchableOpacity>
             
             <TouchableOpacity
@@ -147,7 +208,7 @@ const styles = StyleSheet.create({
     color: '#8B7355',
   },
   placeholder: {
-    width: 60, // Same width as back button for centering
+    width: 60,
   },
   scrollContainer: {
     alignItems: 'center',
@@ -155,6 +216,9 @@ const styles = StyleSheet.create({
   },
   photostripContainer: {
     alignItems: 'center',
+  },
+  viewShotContainer: {
+    backgroundColor: 'transparent',
   },
   photostrip: {
     width: 300,
@@ -216,17 +280,6 @@ const styles = StyleSheet.create({
     opacity: 0.4,
     mixBlendMode: 'saturation',
   },
-  emptyPhoto: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f0f0f0',
-    borderRadius: 5,
-  },
-  emptyPhotoText: {
-    color: '#999',
-    fontSize: 12,
-  },
   stripFooter: {
     alignItems: 'center',
     marginTop: 20,
@@ -251,6 +304,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 4,
+  },
+  actionButtonDisabled: {
+    opacity: 0.7,
   },
   actionButtonText: {
     color: '#fff',
