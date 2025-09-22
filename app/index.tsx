@@ -1074,8 +1074,6 @@ const styles = StyleSheet.create({
     borderColor: '#000',
     borderRadius: 25,
     alignSelf: 'flex-end',
-    // marginRight: -20,
-    
   },
   actionButtonDisabled: {
     borderColor: '#ccc',
