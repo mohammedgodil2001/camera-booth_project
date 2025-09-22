@@ -1,3 +1,439 @@
+// import React, { useState } from 'react';
+// import { 
+//   View, 
+//   Text, 
+//   StyleSheet, 
+//   TouchableOpacity, 
+//   TextInput, 
+//   Switch, 
+//   ScrollView,
+//   Alert 
+// } from 'react-native';
+// import { router } from 'expo-router';
+// import { usePhotos } from '../contexts/PhotoContext';
+
+// interface CustomizationOptions {
+//   stripColor: string;
+//   backgroundColor: string;
+//   showDateStamp: boolean;
+//   blackAndWhite: boolean;
+//   customText: string;
+// }
+
+// export default function CustomizeScreen() {
+//   const { capturedImages } = usePhotos();
+  
+//   const [customization, setCustomization] = useState<CustomizationOptions>({
+//     stripColor: '#8B7355', 
+//     backgroundColor: '#f5f5f0', 
+//     showDateStamp: true,
+//     blackAndWhite: true,
+//     customText: ''
+//   });
+
+  
+//   const stripColors = [
+//     { color: '#8B7355', name: 'Brown' },
+//     { color: '#9B7CB6', name: 'Purple' },
+//     { color: '#E8A5A5', name: 'Pink' },
+//     { color: '#2C2C2C', name: 'Black' }
+//   ];
+
+//   // Background color options
+//   const backgroundColors = [
+//     { color: '#f5f5f0', name: 'Cream' },
+//     { color: '#E8F4F8', name: 'Light Blue' },
+//     { color: '#F8E8F0', name: 'Light Pink' },
+//     { color: '#F0F8E8', name: 'Light Green' }
+//   ];
+
+//   const goBackToUpload = () => {
+//     router.back();
+//   };
+
+//   const navigateToPreview = () => {
+//     if (!customization.customText.trim()) {
+//       Alert.alert(
+//         'Add Your Name',
+//         'Please add your name or custom text for the photostrip.',
+//         [{ text: 'OK' }]
+//       );
+//       return;
+//     }
+
+//     router.push({
+//       pathname: '/preview',
+//       params: {
+//         stripColor: customization.stripColor,
+//         backgroundColor: customization.backgroundColor,
+//         showDateStamp: customization.showDateStamp.toString(),
+//         customText: customization.customText,
+//         blackAndWhite: customization.blackAndWhite.toString()
+//       }
+//     });
+//   };
+
+//   const updateStripColor = (color: string) => {
+//     setCustomization(prev => ({ ...prev, stripColor: color }));
+//   };
+
+//   const updateBackgroundColor = (color: string) => {
+//     setCustomization(prev => ({ ...prev, backgroundColor: color }));
+//   };
+
+//   const toggleDateStamp = () => {
+//     setCustomization(prev => ({ ...prev, showDateStamp: !prev.showDateStamp }));
+//   };
+
+//   const updateCustomText = (text: string) => {
+//     setCustomization(prev => ({ ...prev, customText: text }));
+//   };
+
+//   return (
+//     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+//       {/* Header */}
+//       <TouchableOpacity style={styles.backButton} onPress={goBackToUpload}>
+//         <Text style={styles.backButtonText}>← Back</Text>
+//       </TouchableOpacity>
+
+//       <Text style={styles.mainTitle}>Customize your photostrip</Text>
+
+//       {/* Photo count indicator */}
+//       <View style={styles.photoCountContainer}>
+//         <Text style={styles.photoCountText}>
+//           Ready to create strip with {capturedImages.length} photo{capturedImages.length !== 1 ? 's' : ''}
+//         </Text>
+//       </View>
+
+//       {/* Photostrip Color Selection */}
+//       <View style={styles.sectionContainer}>
+//         <Text style={styles.sectionTitle}>Photostrip</Text>
+//         <View style={styles.colorOptionsContainer}>
+//           {stripColors.map((option, index) => (
+//             <TouchableOpacity
+//               key={index}
+//               style={[
+//                 styles.colorOption,
+//                 { borderColor: option.color },
+//                 customization.stripColor === option.color && styles.selectedColorOption
+//               ]}
+//               onPress={() => updateStripColor(option.color)}
+//             >
+//               <View style={[styles.colorCircle, { backgroundColor: option.color }]}>
+//                 {customization.stripColor === option.color && (
+//                   <Text style={styles.checkmark}>✓</Text>
+//                 )}
+//               </View>
+//             </TouchableOpacity>
+//           ))}
+//         </View>
+//       </View>
+
+//       {/* Background Color Selection */}
+//       <View style={styles.sectionContainer}>
+//         <Text style={styles.sectionTitle}>Background</Text>
+//         <View style={styles.colorOptionsContainer}>
+//           {backgroundColors.map((option, index) => (
+//             <TouchableOpacity
+//               key={index}
+//               style={[
+//                 styles.colorOption,
+//                 { borderColor: option.color === '#f5f5f0' ? '#8B7355' : option.color },
+//                 customization.backgroundColor === option.color && styles.selectedColorOption
+//               ]}
+//               onPress={() => updateBackgroundColor(option.color)}
+//             >
+//               <View style={[styles.colorCircle, { backgroundColor: option.color }]}>
+//                 {customization.backgroundColor === option.color && (
+//                   <Text style={[styles.checkmark, { color: option.color === '#f5f5f0' ? '#8B7355' : '#fff' }]}>✓</Text>
+//                 )}
+//               </View>
+//             </TouchableOpacity>
+//           ))}
+//         </View>
+//       </View>
+
+//       {/* Custom Text Input */}
+//       <View style={styles.sectionContainer}>
+//         <Text style={styles.sectionTitle}>Add your name</Text>
+//         <TextInput
+//           style={styles.textInput}
+//           value={customization.customText}
+//           onChangeText={updateCustomText}
+//           placeholder="Enter your name or custom text"
+//           placeholderTextColor="#999"
+//           maxLength={30}
+//         />
+//         <Text style={styles.characterCount}>
+//           {customization.customText.length}/30 characters
+//         </Text>
+//       </View>
+
+//       {/* Date Stamp Toggle */}
+//       <View style={styles.sectionContainer}>
+//         <View style={styles.toggleContainer}>
+//           <View style={styles.toggleTextContainer}>
+//             <Text style={styles.sectionTitle}>Display date stamp</Text>
+//             <Text style={styles.toggleDescription}>
+//               Show todays date on your photostrip
+//             </Text>
+//           </View>
+//           <Switch
+//             value={customization.showDateStamp}
+//             onValueChange={toggleDateStamp}
+//             trackColor={{ false: '#ccc', true: customization.stripColor }}
+//             thumbColor="#fff"
+//           />
+//         </View>
+//       </View>
+
+//       <View>
+//         {/* Black & White Toggle */}
+//         <View style={styles.sectionContainer}>
+//           <View style={styles.toggleContainer}>
+//             <View style={styles.toggleTextContainer}>
+//               <Text style={styles.sectionTitle}>Black & White</Text>
+//               <Text style={styles.toggleDescription}>
+//                 Apply a classic black and white filter to your photos
+//               </Text>
+//             </View>
+//             <Switch
+//               value={customization.blackAndWhite}
+//               onValueChange={() => setCustomization(prev => ({ ...prev, blackAndWhite: !prev.blackAndWhite }))}
+//               trackColor={{ false: '#ccc', true: customization.stripColor }}
+//               thumbColor="#fff"
+//             />
+//           </View>
+//         </View>
+//       </View>
+
+//       {/* Preview Section */}
+//       {/* <View style={styles.previewContainer}>
+//         <Text style={styles.previewTitle}>Preview</Text>
+//         <View style={[styles.miniPreview, { backgroundColor: customization.backgroundColor }]}>
+//           <View style={[styles.miniStrip, { backgroundColor: customization.stripColor }]}>
+//             <Text style={styles.miniStripText}>
+//               {customization.customText || 'Your Name'}
+//             </Text>
+//             {customization.showDateStamp && (
+//               <Text style={styles.miniDateText}>
+//                 {new Date().toLocaleDateString()}
+//               </Text>
+//             )}
+//           </View>
+//           <View style={styles.miniPhotos}>
+//             {[1, 2, 3].map((num) => (
+//               <View key={num} style={styles.miniPhoto} />
+//             ))}
+//           </View>
+//         </View>
+//       </View> */}
+
+//       {/* Continue Button */}
+//       <TouchableOpacity
+//         style={[
+//           styles.continueButton,
+//           { backgroundColor: customization.stripColor },
+//           !customization.customText.trim() && styles.continueButtonDisabled
+//         ]}
+//         onPress={navigateToPreview}
+//         disabled={!customization.customText.trim()}
+//       >
+//         <Text style={styles.continueButtonText}>
+//           Create My Photostrip
+//         </Text>
+//       </TouchableOpacity>
+//     </ScrollView>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#f5f5f0',
+//   },
+//   contentContainer: {
+//     padding: 20,
+//     paddingBottom: 40,
+//   },
+//   backButton: {
+//     backgroundColor: '#333',
+//     paddingHorizontal: 15,
+//     paddingVertical: 8,
+//     borderRadius: 20,
+//     alignSelf: 'flex-start',
+//     marginBottom: 20,
+//     marginTop: 40,
+//   },
+//   backButtonText: {
+//     color: 'white',
+//     fontSize: 14,
+//     fontWeight: '600',
+//   },
+//   mainTitle: {
+//     fontSize: 32,
+//     fontWeight: 'bold',
+//     color: '#8B7355',
+//     marginBottom: 20,
+//     textAlign: 'center',
+//     fontStyle: 'italic',
+//   },
+//   photoCountContainer: {
+//     backgroundColor: 'rgba(255, 255, 255, 0.8)',
+//     padding: 12,
+//     borderRadius: 10,
+//     marginBottom: 30,
+//     alignItems: 'center',
+//   },
+//   photoCountText: {
+//     fontSize: 16,
+//     color: '#666',
+//     fontWeight: '500',
+//   },
+//   sectionContainer: {
+//     marginBottom: 30,
+//   },
+//   sectionTitle: {
+//     fontSize: 20,
+//     fontWeight: '600',
+//     color: '#8B7355',
+//     marginBottom: 15,
+//   },
+//   colorOptionsContainer: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-around',
+//     paddingHorizontal: 20,
+//   },
+//   colorOption: {
+//     padding: 4,
+//     borderRadius: 35,
+//     borderWidth: 3,
+//     borderColor: 'transparent',
+//   },
+//   selectedColorOption: {
+//     borderWidth: 3,
+//   },
+//   colorCircle: {
+//     width: 60,
+//     height: 60,
+//     borderRadius: 30,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     borderWidth: 2,
+//     borderColor: '#fff',
+//     shadowColor: '#000',
+//     shadowOffset: { width: 0, height: 2 },
+//     shadowOpacity: 0.1,
+//     shadowRadius: 4,
+//     elevation: 3,
+//   },
+//   checkmark: {
+//     color: '#fff',
+//     fontSize: 24,
+//     fontWeight: 'bold',
+//   },
+//   textInput: {
+//     backgroundColor: '#fff',
+//     borderWidth: 2,
+//     borderColor: '#8B7355',
+//     borderRadius: 12,
+//     paddingHorizontal: 15,
+//     paddingVertical: 12,
+//     fontSize: 16,
+//     color: '#333',
+//   },
+//   characterCount: {
+//     fontSize: 12,
+//     color: '#666',
+//     marginTop: 5,
+//     textAlign: 'right',
+//   },
+//   toggleContainer: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//     alignItems: 'center',
+//     backgroundColor: '#fff',
+//     padding: 15,
+//     borderRadius: 12,
+//     borderWidth: 2,
+//     borderColor: '#8B7355',
+//   },
+//   toggleTextContainer: {
+//     flex: 1,
+//   },
+//   toggleDescription: {
+//     fontSize: 14,
+//     color: '#666',
+//     marginTop: 2,
+//   },
+//   previewContainer: {
+//     marginBottom: 30,
+//   },
+//   previewTitle: {
+//     fontSize: 20,
+//     fontWeight: '600',
+//     color: '#8B7355',
+//     marginBottom: 15,
+//     textAlign: 'center',
+//   },
+//   miniPreview: {
+//     flexDirection: 'row',
+//     padding: 15,
+//     borderRadius: 12,
+//     alignItems: 'center',
+//     borderWidth: 2,
+//     borderColor: '#8B7355',
+//   },
+//   miniStrip: {
+//     width: 80,
+//     height: 120,
+//     borderRadius: 8,
+//     justifyContent: 'space-between',
+//     alignItems: 'center',
+//     paddingVertical: 8,
+//     marginRight: 15,
+//   },
+//   miniStripText: {
+//     color: '#fff',
+//     fontSize: 10,
+//     fontWeight: 'bold',
+//     textAlign: 'center',
+//   },
+//   miniDateText: {
+//     color: '#fff',
+//     fontSize: 8,
+//     textAlign: 'center',
+//   },
+//   miniPhotos: {
+//     flex: 1,
+//   },
+//   miniPhoto: {
+//     height: 30,
+//     backgroundColor: '#ddd',
+//     marginBottom: 5,
+//     borderRadius: 4,
+//   },
+//   continueButton: {
+//     paddingVertical: 15,
+//     borderRadius: 25,
+//     alignItems: 'center',
+//     shadowColor: '#000',
+//     shadowOffset: { width: 0, height: 2 },
+//     shadowOpacity: 0.2,
+//     shadowRadius: 4,
+//     elevation: 4,
+//   },
+//   continueButtonDisabled: {
+//     backgroundColor: '#ccc',
+//   },
+//   continueButtonText: {
+//     color: '#fff',
+//     fontSize: 18,
+//     fontWeight: 'bold',
+//   },
+// });
+
+
 import React, { useState } from 'react';
 import { 
   View, 
@@ -11,6 +447,7 @@ import {
 } from 'react-native';
 import { router } from 'expo-router';
 import { usePhotos } from '../contexts/PhotoContext';
+import Svg, { Path } from 'react-native-svg';
 
 interface CustomizationOptions {
   stripColor: string;
@@ -21,7 +458,7 @@ interface CustomizationOptions {
 }
 
 export default function CustomizeScreen() {
-  const { capturedImages } = usePhotos();
+  // const { capturedImages } = usePhotos();
   
   const [customization, setCustomization] = useState<CustomizationOptions>({
     stripColor: '#8B7355', 
@@ -31,7 +468,6 @@ export default function CustomizeScreen() {
     customText: ''
   });
 
-  
   const stripColors = [
     { color: '#8B7355', name: 'Brown' },
     { color: '#9B7CB6', name: 'Purple' },
@@ -39,7 +475,6 @@ export default function CustomizeScreen() {
     { color: '#2C2C2C', name: 'Black' }
   ];
 
-  // Background color options
   const backgroundColors = [
     { color: '#f5f5f0', name: 'Cream' },
     { color: '#E8F4F8', name: 'Light Blue' },
@@ -85,37 +520,40 @@ export default function CustomizeScreen() {
     setCustomization(prev => ({ ...prev, showDateStamp: !prev.showDateStamp }));
   };
 
+  const toggleBlackAndWhite = () => {
+    setCustomization(prev => ({ ...prev, blackAndWhite: !prev.blackAndWhite }));
+  };
+
   const updateCustomText = (text: string) => {
     setCustomization(prev => ({ ...prev, customText: text }));
   };
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      {/* Header */}
-      <TouchableOpacity style={styles.backButton} onPress={goBackToUpload}>
-        <Text style={styles.backButtonText}>← Back</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.mainTitle}>Customize your photostrip</Text>
-
-      {/* Photo count indicator */}
-      <View style={styles.photoCountContainer}>
-        <Text style={styles.photoCountText}>
-          Ready to create strip with {capturedImages.length} photo{capturedImages.length !== 1 ? 's' : ''}
-        </Text>
+      
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.backButton} onPress={goBackToUpload}>
+          <Svg width="28" height="24" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <Path d="M11.2398 0.345584L0 11.6438L11.2398 22.9421C11.3413 23.0754 11.4702 23.1853 11.6179 23.2644C11.7656 23.3436 11.9286 23.39 12.0958 23.4007C12.263 23.4114 12.4306 23.386 12.5871 23.3263C12.7437 23.2666 12.8856 23.1739 13.0032 23.0546C13.1208 22.9353 13.2114 22.7921 13.2689 22.6347C13.3264 22.4773 13.3494 22.3094 13.3363 22.1423C13.3233 21.9753 13.2745 21.813 13.1932 21.6665C13.112 21.5199 13.0002 21.3925 12.8655 21.2929L4.45614 12.8134L26.8304 12.8134C27.1406 12.8134 27.4381 12.6902 27.6574 12.4709C27.8768 12.2515 28 11.954 28 11.6438C28 11.3336 27.8768 11.0361 27.6574 10.8168C27.4381 10.5975 27.1406 10.4742 26.8304 10.4742L4.45614 10.4742L12.8655 1.99471C13.0842 1.77447 13.2064 1.47638 13.2053 1.16601C13.2042 0.855642 13.0799 0.558422 12.8596 0.339734C12.6394 0.121047 12.3413 -0.00119377 12.031 -9.70724e-05C11.7206 0.000999625 11.4234 0.125345 11.2047 0.345584H11.2398Z" fill="black"/>
+          </Svg>
+        </TouchableOpacity>
       </View>
 
-      {/* Photostrip Color Selection */}
+      
+      <View style={styles.titleSection}>
+        <Text style={styles.mainTitle}>customise photo strip</Text>
+      </View>
+
+      
       <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>Photostrip</Text>
+        <Text style={styles.sectionTitle}>photo strip</Text>
         <View style={styles.colorOptionsContainer}>
           {stripColors.map((option, index) => (
             <TouchableOpacity
               key={index}
               style={[
                 styles.colorOption,
-                { borderColor: option.color },
-                customization.stripColor === option.color && styles.selectedColorOption
+                // customization.stripColor === option.color && styles.selectedColorOption
               ]}
               onPress={() => updateStripColor(option.color)}
             >
@@ -127,121 +565,99 @@ export default function CustomizeScreen() {
             </TouchableOpacity>
           ))}
         </View>
+        <View style={styles.sectionUnderline} />
       </View>
 
-      {/* Background Color Selection */}
+      
       <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>Background</Text>
+        <Text style={styles.sectionTitle}>background</Text>
         <View style={styles.colorOptionsContainer}>
           {backgroundColors.map((option, index) => (
             <TouchableOpacity
               key={index}
               style={[
                 styles.colorOption,
-                { borderColor: option.color === '#f5f5f0' ? '#8B7355' : option.color },
                 customization.backgroundColor === option.color && styles.selectedColorOption
               ]}
               onPress={() => updateBackgroundColor(option.color)}
             >
               <View style={[styles.colorCircle, { backgroundColor: option.color }]}>
                 {customization.backgroundColor === option.color && (
-                  <Text style={[styles.checkmark, { color: option.color === '#f5f5f0' ? '#8B7355' : '#fff' }]}>✓</Text>
+                  <Text style={[
+                    styles.checkmark, 
+                    { color: option.color === '#f5f5f0' ? '#8B7355' : '#000' }
+                  ]}>✓</Text>
                 )}
               </View>
             </TouchableOpacity>
           ))}
         </View>
+        <View style={styles.sectionUnderline} />
       </View>
 
-      {/* Custom Text Input */}
+      
       <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>Add your name</Text>
+        <Text style={styles.sectionTitle}>ADD YOUR NAME</Text>
         <TextInput
           style={styles.textInput}
           value={customization.customText}
           onChangeText={updateCustomText}
-          placeholder="Enter your name or custom text"
+          placeholder=""
           placeholderTextColor="#999"
           maxLength={30}
         />
-        <Text style={styles.characterCount}>
-          {customization.customText.length}/30 characters
-        </Text>
+        <View style={styles.sectionUnderline} />
       </View>
 
-      {/* Date Stamp Toggle */}
+      
       <View style={styles.sectionContainer}>
-        <View style={styles.toggleContainer}>
-          <View style={styles.toggleTextContainer}>
-            <Text style={styles.sectionTitle}>Display date stamp</Text>
-            <Text style={styles.toggleDescription}>
-              Show todays date on your photostrip
-            </Text>
-          </View>
+        <View style={styles.toggleRow}>
+          <Text style={styles.sectionTitle}>DATE STAMP</Text>
           <Switch
             value={customization.showDateStamp}
             onValueChange={toggleDateStamp}
-            trackColor={{ false: '#ccc', true: customization.stripColor }}
+            trackColor={{ false: '#ccc', true: '#000' }}
             thumbColor="#fff"
+            style={styles.switch}
           />
         </View>
+        <View style={styles.sectionUnderline} />
       </View>
 
-      <View>
-        {/* Black & White Toggle */}
-        <View style={styles.sectionContainer}>
-          <View style={styles.toggleContainer}>
-            <View style={styles.toggleTextContainer}>
-              <Text style={styles.sectionTitle}>Black & White</Text>
-              <Text style={styles.toggleDescription}>
-                Apply a classic black and white filter to your photos
-              </Text>
-            </View>
-            <Switch
-              value={customization.blackAndWhite}
-              onValueChange={() => setCustomization(prev => ({ ...prev, blackAndWhite: !prev.blackAndWhite }))}
-              trackColor={{ false: '#ccc', true: customization.stripColor }}
-              thumbColor="#fff"
-            />
-          </View>
+      
+      <View style={styles.sectionContainer}>
+        <View style={styles.toggleRow}>
+          <Text style={styles.sectionTitle}>BLACK & WHITE</Text>
+          <Switch
+            value={customization.blackAndWhite}
+            onValueChange={toggleBlackAndWhite}
+            trackColor={{ false: '#ccc', true: '#000' }}
+            thumbColor="#fff"
+            style={styles.switch}
+          />
         </View>
+        <View style={styles.sectionUnderline} />
       </View>
 
-      {/* Preview Section */}
-      {/* <View style={styles.previewContainer}>
-        <Text style={styles.previewTitle}>Preview</Text>
-        <View style={[styles.miniPreview, { backgroundColor: customization.backgroundColor }]}>
-          <View style={[styles.miniStrip, { backgroundColor: customization.stripColor }]}>
-            <Text style={styles.miniStripText}>
-              {customization.customText || 'Your Name'}
-            </Text>
-            {customization.showDateStamp && (
-              <Text style={styles.miniDateText}>
-                {new Date().toLocaleDateString()}
-              </Text>
-            )}
-          </View>
-          <View style={styles.miniPhotos}>
-            {[1, 2, 3].map((num) => (
-              <View key={num} style={styles.miniPhoto} />
-            ))}
-          </View>
-        </View>
-      </View> */}
-
-      {/* Continue Button */}
+      
       <TouchableOpacity
         style={[
           styles.continueButton,
-          { backgroundColor: customization.stripColor },
           !customization.customText.trim() && styles.continueButtonDisabled
         ]}
         onPress={navigateToPreview}
         disabled={!customization.customText.trim()}
       >
-        <Text style={styles.continueButtonText}>
-          Create My Photostrip
+        <Text style={[
+          styles.continueButtonText,
+          !customization.customText.trim() && styles.continueButtonTextDisabled
+        ]}>
+          create my photostrip
         </Text>
+        <Svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <Path d="M12.353 9.84902L12.0196 0.642482L2.81147 0.928064C2.71511 0.918301 2.61777 0.929355 2.52605 0.96048C2.43433 0.991604 2.35037 1.04207 2.27985 1.10847C2.20933 1.17486 2.1539 1.25563 2.11731 1.34531C2.08072 1.43499 2.06383 1.53149 2.06777 1.62826C2.07172 1.72504 2.09641 1.81984 2.14018 1.90624C2.18394 1.99264 2.24576 2.06864 2.32145 2.12907C2.39714 2.1895 2.48493 2.23297 2.57888 2.25653C2.67283 2.28008 2.77074 2.28318 2.86599 2.2656L9.76649 2.06237L0.933264 11.51C0.810801 11.641 0.745386 11.8153 0.75141 11.9945C0.757433 12.1737 0.834402 12.3432 0.965384 12.4657C1.09637 12.5881 1.27063 12.6535 1.44984 12.6475C1.62906 12.6415 1.79853 12.5645 1.921 12.4335L10.7542 2.98586L11.0148 9.88444C11.0215 10.0637 11.0991 10.233 11.2306 10.3551C11.362 10.4772 11.5366 10.542 11.7159 10.5353C11.8952 10.5287 12.0645 10.4511 12.1866 10.3196C12.3087 10.1881 12.3735 10.0135 12.3668 9.83421L12.353 9.84902Z" 
+          fill={!customization.customText.trim() ? "#ccc" : "#000"}/>
+        </Svg>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -250,185 +666,114 @@ export default function CustomizeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f0',
+    backgroundColor: '#ffffff',
   },
   contentContainer: {
-    padding: 20,
+    paddingHorizontal: 20,
     paddingBottom: 40,
   },
-  backButton: {
-    backgroundColor: '#333',
-    paddingHorizontal: 15,
-    paddingVertical: 8,
-    borderRadius: 20,
-    alignSelf: 'flex-start',
-    marginBottom: 20,
-    marginTop: 40,
+  header: {
+    paddingTop: 60,
+    paddingBottom: 20,
+    borderBottomWidth: 2,
+    borderBottomColor: '#B8B8B8',
   },
-  backButtonText: {
-    color: 'white',
-    fontSize: 14,
-    fontWeight: '600',
+  backButton: {
+    padding: 10,
+    alignSelf: 'flex-start',
+  },
+  titleSection: {
+    marginBottom: 40,
+    paddingTop: 25,
   },
   mainTitle: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#8B7355',
-    marginBottom: 20,
-    textAlign: 'center',
-    fontStyle: 'italic',
-  },
-  photoCountContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    padding: 12,
-    borderRadius: 10,
-    marginBottom: 30,
-    alignItems: 'center',
-  },
-  photoCountText: {
-    fontSize: 16,
-    color: '#666',
-    fontWeight: '500',
+    fontSize: 50,
+    color: '#000',
+    fontFamily: 'grotesk',
+    textTransform: 'uppercase',
+    borderBottomWidth: 2,
+    borderBottomColor: '#B8B8B8',
+    paddingBottom: 25,
   },
   sectionContainer: {
-    marginBottom: 30,
+    marginBottom: 40,
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#8B7355',
-    marginBottom: 15,
+    fontSize: 21,
+    color: '#000',
+    fontFamily: 'grotesk',
+    textTransform: 'uppercase',
+    marginBottom: 20,
   },
   colorOptionsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingHorizontal: 20,
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    marginBottom: 20,
   },
   colorOption: {
-    padding: 4,
-    borderRadius: 35,
-    borderWidth: 3,
-    borderColor: 'transparent',
-  },
-  selectedColorOption: {
-    borderWidth: 3,
+    padding: 2,
   },
   colorCircle: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 65,
+    height: 65,
+    borderRadius: '50%',
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
   checkmark: {
     color: '#fff',
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   textInput: {
-    backgroundColor: '#fff',
-    borderWidth: 2,
-    borderColor: '#8B7355',
-    borderRadius: 12,
-    paddingHorizontal: 15,
-    paddingVertical: 12,
-    fontSize: 16,
-    color: '#333',
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    paddingHorizontal: 0,
+    fontSize: 18,
+    color: '#000',
+    fontFamily: 'grotesk',
+    marginBottom: 10,
   },
-  characterCount: {
-    fontSize: 12,
-    color: '#666',
-    marginTop: 5,
-    textAlign: 'right',
-  },
-  toggleContainer: {
+  toggleRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: '#8B7355',
+    marginBottom: 20,
   },
-  toggleTextContainer: {
-    flex: 1,
+  switch: {
+    transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }],
   },
-  toggleDescription: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 2,
-  },
-  previewContainer: {
-    marginBottom: 30,
-  },
-  previewTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#8B7355',
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-  miniPreview: {
-    flexDirection: 'row',
-    padding: 15,
-    borderRadius: 12,
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#8B7355',
-  },
-  miniStrip: {
-    width: 80,
-    height: 120,
-    borderRadius: 8,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 8,
-    marginRight: 15,
-  },
-  miniStripText: {
-    color: '#fff',
-    fontSize: 10,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  miniDateText: {
-    color: '#fff',
-    fontSize: 8,
-    textAlign: 'center',
-  },
-  miniPhotos: {
-    flex: 1,
-  },
-  miniPhoto: {
-    height: 30,
-    backgroundColor: '#ddd',
-    marginBottom: 5,
-    borderRadius: 4,
+  sectionUnderline: {
+    height: 2,
+    backgroundColor: '#B8B8B8',
+    width: '100%',
   },
   continueButton: {
-    paddingVertical: 15,
-    borderRadius: 25,
+    flexDirection: 'row',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4,
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderColor: '#000',
+    borderRadius: 25,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    alignSelf: 'flex-end',
+    marginTop: 40,
+    gap: 15,
   },
   continueButtonDisabled: {
-    backgroundColor: '#ccc',
+    borderColor: '#ccc',
   },
   continueButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 16,
+    color: '#000',
+    fontFamily: 'grotesk',
+    textTransform: 'uppercase',
+  },
+  continueButtonTextDisabled: {
+    color: '#ccc',
   },
 });
