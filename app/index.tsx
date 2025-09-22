@@ -989,7 +989,7 @@ export default function HomeScreen() {
               onPress={() => setShowGallery(false)}
             >
               <Text>
-                <Svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <Svg width="23" height="23" viewBox="0 0 23 23" fill="none" >
                 <Path d="M16.9761 16.9761L6.02368 6.02368M16.9761 6.02368L6.02368 16.9761" stroke="black" stroke-width="1.09524" stroke-linecap="round" stroke-linejoin="round"/>
                 </Svg>
 

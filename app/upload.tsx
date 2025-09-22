@@ -429,7 +429,12 @@ export default function UploadScreen() {
                   <>
                     <Image source={{ uri: hasImage }} style={styles.boxImage} />
                     <View style={styles.removeOverlay}>
-                      <Text style={styles.removeText}>Tap to Remove</Text>
+                      <Text style={styles.removeText}>
+                        <Svg width="20" height="20" viewBox="0 0 23 23" fill="none" >
+                        <Path d="M16.9761 16.9761L6.02368 6.02368M16.9761 6.02368L6.02368 16.9761" stroke="black" stroke-width="1.09524" stroke-linecap="round" stroke-linejoin="round"/>
+                        </Svg>
+                      </Text>
+                      {/* <Text style={styles.removeText}>Tap to Remove</Text> */}
                     </View>
                   </>
                 ) : (
@@ -449,7 +454,7 @@ export default function UploadScreen() {
       
       <View style={styles.instructionSection}>
         <Text style={styles.instructionText}>
-          Tap the empty boxes to upload the photos and tap the filled boxes to remove them
+          Tap the empty boxes to upload the photos and tap the wrong icon to remove them
         </Text>
         <Text style={styles.instructionText}>
         </Text>
@@ -552,7 +557,7 @@ export default function UploadScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f8f8',
+    backgroundColor: '#ffffff',
     paddingHorizontal: 20,
   },
   header: {
@@ -682,14 +687,15 @@ boxNumberDisabled: {
 },
 removeOverlay: {
   position: 'absolute',
-  bottom: 0,
-  left: 0,
-  right: 0,
-  backgroundColor: 'black',
-  // backgroundColor: '#dfdfdfff',
-  padding: 5,
-  borderBottomLeftRadius: 2,
-  borderBottomRightRadius: 2,
+  top: -10,
+  right: -10,
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: 'white',
+  padding: 2,
+  borderColor: 'black',
+  borderWidth: 1,
+  borderRadius: '50%',
 },
 removeText: {
   color: 'white',
