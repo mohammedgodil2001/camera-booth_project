@@ -883,14 +883,14 @@ export default function HomeScreen() {
             </Svg>
           </TouchableOpacity>
 
-          {/* {capturedImages.length > 0 && (
+          {capturedImages.length > 0 && (
             <>
-              <View style={styles.buttonSpacing} />
-              <TouchableOpacity style={styles.clearButton} onPress={clearAllPhotos}>
-                <Text style={styles.clearButtonText}>Clear All Photos</Text>
+              
+              <TouchableOpacity style={styles.clearPhotosContainer}  onPress={clearAllPhotos}>
+                <Text style={styles.clearPhotosText}>Clear All Photos</Text>
               </TouchableOpacity>
             </>
-          )} */}
+          )}
         </View>
       </View>
 
@@ -1090,12 +1090,15 @@ const styles = StyleSheet.create({
  
   bottomButtons: {
      marginBottom: -20,
+     flexDirection: 'column',
+     gap: 20,
+     alignItems: 'flex-start',
   },
   bottomButton: {
     flexDirection: 'row',
     gap: 8,
     alignItems: 'center',
-    marginVertical: 8,
+    // marginVertical: 8,
   },
   bottomButtonText: {
     fontSize: 16,
@@ -1280,4 +1283,19 @@ verticalLetter: {
   transform: [{ rotate: '-90deg' }], 
   textTransform: 'uppercase',
 },
+clearPhotosContainer:{
+  paddingVertical: 4,
+  paddingHorizontal: 10,
+  borderWidth: 1,
+  borderColor: '#000',
+  borderRadius: 25,
+  // flex : 1,
+  backgroundColor: '#000',
+},
+clearPhotosText: {
+  fontSize: 16,
+  color: 'white',
+  fontFamily: 'grotesk',
+  textTransform: 'uppercase',
+  },
 });
