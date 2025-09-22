@@ -428,7 +428,7 @@ export default function PreviewScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor }]}>
-      {/* Header */}
+      
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={goBackToCustomize}>
           <Text style={styles.backButtonText}>← Back</Text>
@@ -437,11 +437,11 @@ export default function PreviewScreen() {
         <View style={styles.placeholder} />
       </View>
 
-      {/* Photostrip Container */}
+      
       <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         <View style={styles.photostripContainer}>
           
-          {/* This ViewShot wrapper captures everything inside it */}
+          
           <ViewShot 
             ref={viewShotRef}
             options={{
@@ -453,7 +453,7 @@ export default function PreviewScreen() {
           >
             <View style={[styles.photostrip, { backgroundColor: stripColor }]}>
               
-              {/* Header Section with Text and Date */}
+              
               <View style={styles.stripHeader}>
                 <Text style={styles.customText}>{customText}</Text>
                 {showDateStamp && (
@@ -461,7 +461,7 @@ export default function PreviewScreen() {
                 )}
               </View>
 
-              {/* Photos Section - Using Skia B&W Effect */}
+              
               <View style={styles.photosContainer}>
                 {capturedImages.map((imageUri, index) => (
                   <View key={index} style={styles.photoFrame}>
@@ -485,7 +485,7 @@ export default function PreviewScreen() {
                 ))}
               </View>
 
-              {/* Footer */}
+              
               <View style={styles.stripFooter}>
                 <View style={styles.stripFooterLine} />
               </View>
