@@ -937,14 +937,16 @@ const styles = StyleSheet.create({
   },
   actionButtonsContainer: {
     flexDirection: 'row',
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
     paddingVertical: 20,
-    
+    // borderWidth: 2,
+    // borderColor: '#B8B8B8',
     gap: 15,
+    alignSelf : 'flex-end',
     
   },
   makeNewButton: {
-    flex: 1,
+    // flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -968,8 +970,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 4,
     paddingHorizontal: 10,
-    // paddingVertical: 12,
-    // paddingHorizontal: 30,
     borderRadius: 25,
     backgroundColor: '#000',
     gap: 8,
