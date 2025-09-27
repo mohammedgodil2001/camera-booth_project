@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
   View, 
   Text, 
@@ -7,7 +7,7 @@ import {
   TextInput, 
   Switch, 
   ScrollView,
-  Alert 
+  Alert
 } from 'react-native';
 import { router } from 'expo-router';
 import Svg, { Path } from 'react-native-svg';
@@ -28,6 +28,8 @@ export default function CustomizeScreen() {
     blackAndWhite: true,
     customText: ''
   });
+
+  const textInputRef = useRef<TextInput>(null);
 
   const stripColors = [
     { color: '#8B7355', name: 'Brown' },
@@ -155,16 +157,23 @@ export default function CustomizeScreen() {
       </View>
 
       
+      
       <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>ADD YOUR NAME</Text>
-        <TextInput
-          style={styles.textInput}
-          value={customization.customText}
-          onChangeText={updateCustomText}
-          placeholder=""
-          placeholderTextColor="#999"
-          maxLength={30}
-        />
+        <TouchableOpacity 
+          onPress={() => textInputRef.current?.focus()}
+          activeOpacity={1}
+        >
+          <Text style={styles.sectionTitle}>ADD YOUR NAME</Text>
+          <TextInput
+            ref={textInputRef}
+            style={styles.textInput}
+            value={customization.customText}
+            onChangeText={updateCustomText}
+            placeholder=""
+            placeholderTextColor="#999"
+            maxLength={30}
+          />
+        </TouchableOpacity>
         <View style={styles.sectionUnderline} />
       </View>
 
