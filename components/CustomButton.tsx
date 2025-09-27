@@ -15,6 +15,7 @@ interface CustomButtonProps {
   disabledTextStyle?: any;
   loading?: boolean;
   loadingText?: string;
+  checkPhotoLimit?: boolean; 
 }
 
 export default function CustomButton({
@@ -29,17 +30,21 @@ export default function CustomButton({
   disabledTextStyle,
   loading = false,
   loadingText,
+  checkPhotoLimit = true, 
 }: CustomButtonProps) {
-  const isDisabled = disabled || loading;
-  const displayText = loading && loadingText ? loadingText : title;
   const canAddMore = usePhotoStore(state => state.canAddMore());
+  
+  
+  const photoLimitDisabled = checkPhotoLimit && !canAddMore;
+  const isDisabled = disabled || loading || photoLimitDisabled;
+  
+  const displayText = loading && loadingText ? loadingText : title;
 
   return (
     <TouchableOpacity
       style={[
         style,
         isDisabled && disabledStyle,
-        !canAddMore && disabledStyle
       ]}
       onPress={onPress}
       disabled={isDisabled}

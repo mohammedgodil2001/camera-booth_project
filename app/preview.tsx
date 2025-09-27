@@ -191,6 +191,7 @@ export default function PreviewScreen() {
             style={styles.makeNewButton}
             textStyle={styles.makeNewButtonText}
             arrowColor="#000"
+            checkPhotoLimit={false}
           />
           <CustomButton
             title="save"
@@ -201,6 +202,7 @@ export default function PreviewScreen() {
             textStyle={styles.saveButtonText}
             disabledStyle={styles.saveButtonDisabled}
             arrowColor="#fff"
+            checkPhotoLimit={false}
           />
         </View>
       </View>

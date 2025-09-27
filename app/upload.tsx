@@ -173,6 +173,7 @@ export default function UploadScreen() {
           disabledStyle={styles.continueButtonDisabled}
           disabledTextStyle={styles.continueButtonTextDisabled}
           arrowColor={capturedImages.length === 0 ? "#ccc" : "#000"}
+          checkPhotoLimit={false}
         />
       
       <View style={styles.bottomSvgContainer}>
