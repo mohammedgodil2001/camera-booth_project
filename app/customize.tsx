@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { router } from 'expo-router';
 import Svg, { Path } from 'react-native-svg';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 interface CustomizationOptions {
   stripColor: string;
@@ -96,9 +97,7 @@ export default function CustomizeScreen() {
       
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={goBackToUpload}>
-          <Svg width="28" height="24" viewBox="0 0 28 24" fill="none" >
-            <Path d="M11.2398 0.345584L0 11.6438L11.2398 22.9421C11.3413 23.0754 11.4702 23.1853 11.6179 23.2644C11.7656 23.3436 11.9286 23.39 12.0958 23.4007C12.263 23.4114 12.4306 23.386 12.5871 23.3263C12.7437 23.2666 12.8856 23.1739 13.0032 23.0546C13.1208 22.9353 13.2114 22.7921 13.2689 22.6347C13.3264 22.4773 13.3494 22.3094 13.3363 22.1423C13.3233 21.9753 13.2745 21.813 13.1932 21.6665C13.112 21.5199 13.0002 21.3925 12.8655 21.2929L4.45614 12.8134L26.8304 12.8134C27.1406 12.8134 27.4381 12.6902 27.6574 12.4709C27.8768 12.2515 28 11.954 28 11.6438C28 11.3336 27.8768 11.0361 27.6574 10.8168C27.4381 10.5975 27.1406 10.4742 26.8304 10.4742L4.45614 10.4742L12.8655 1.99471C13.0842 1.77447 13.2064 1.47638 13.2053 1.16601C13.2042 0.855642 13.0799 0.558422 12.8596 0.339734C12.6394 0.121047 12.3413 -0.00119377 12.031 -9.70724e-05C11.7206 0.000999625 11.4234 0.125345 11.2047 0.345584H11.2398Z" fill="black"/>
-          </Svg>
+          <Ionicons name="arrow-back" size={35}/>
         </TouchableOpacity>
       </View>
 
@@ -121,7 +120,9 @@ export default function CustomizeScreen() {
             >
               <View style={[styles.colorCircle, { backgroundColor: option.color }]}>
                 {customization.stripColor === option.color && (
-                  <Text style={styles.checkmark}>✓</Text>
+                  <Text style={styles.checkmark}>
+                    <Ionicons name="checkmark" size={24}  />
+                  </Text>
                 )}
               </View>
             </TouchableOpacity>
@@ -147,7 +148,9 @@ export default function CustomizeScreen() {
                   <Text style={[
                     styles.checkmark, 
                     { color: option.color === '#f5f5f0' ? '#8B7355' : '#000' }
-                  ]}>✓</Text>
+                  ]}>
+                    <Ionicons name="checkmark" size={24}  />
+                  </Text>
                 )}
               </View>
             </TouchableOpacity>
