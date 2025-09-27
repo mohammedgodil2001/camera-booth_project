@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     marginTop: 15,
     minHeight: 40,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
   },
   customText: {
     color: '#fff',

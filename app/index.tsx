@@ -448,7 +448,6 @@ export default function HomeScreen() {
               styles.bottomButton,
               styles.viewGalleryRightButton,
             ]}
-            // onPress={navigateToCustomize}
             onPress={() => {
               setShowGallery(false);
               navigateToCustomize();
