@@ -114,7 +114,6 @@ export default function CustomizeScreen() {
               key={index}
               style={[
                 styles.colorOption,
-                // customization.stripColor === option.color && styles.selectedColorOption
               ]}
               onPress={() => updateStripColor(option.color)}
             >
@@ -138,7 +137,6 @@ export default function CustomizeScreen() {
               key={index}
               style={[
                 styles.colorOption,
-                // customization.backgroundColor === option.color && styles.selectedColorOption
               ]}
               onPress={() => updateBackgroundColor(option.color)}
             >

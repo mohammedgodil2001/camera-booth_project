@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Alert, Dimensions, Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { usePhotoStore } from '../stores/photoStore';
 import Svg, { Path, Line, Circle, G, Rect, Defs, ClipPath } from 'react-native-svg';
+import CustomButton from '../components/CustomButton';
 
 
 const { width } = Dimensions.get('window');
@@ -315,9 +316,16 @@ export default function HomeScreen() {
           {capturedImages.length > 0 && (
             <>
               
-              <TouchableOpacity style={styles.clearPhotosContainer}  onPress={clearAllPhotos}>
+              {/* <TouchableOpacity style={styles.clearPhotosContainer}  onPress={clearAllPhotos}>
                 <Text style={styles.clearPhotosText}>Clear All Photos</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
+              <CustomButton
+                title="clear all photos"
+                onPress={clearAllPhotos}
+                showArrow={false}
+                style={styles.clearPhotosContainer}
+                textStyle={styles.clearPhotosText}
+              />
             </>
           )}
         </View>
