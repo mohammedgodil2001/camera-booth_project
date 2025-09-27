@@ -34,7 +34,7 @@ export const usePhotoStore = create<PhotoStore>((set, get) => ({
   }),
   
   removeImage: (index) => set((state) => ({
-    capturedImages: state.capturedImages.filter((_, i) => i !== index)
+    capturedImages: state.capturedImages.filter((image, i) => i !== index)
   })),
   
   clearAllImages: () => set({ capturedImages: [] }),
@@ -49,7 +49,7 @@ export const usePhotoStore = create<PhotoStore>((set, get) => ({
     return { capturedImages: newImages };
   }),
   
-  // Computed values
+  
   canAddMore: () => {
     const state = get();
     return state.capturedImages.length < state.MAX_IMAGES;
