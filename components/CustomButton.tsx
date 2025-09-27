@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Text } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
+import { usePhotoStore } from '../stores/photoStore';
 
 interface CustomButtonProps {
   title: string;
@@ -31,12 +32,14 @@ export default function CustomButton({
 }: CustomButtonProps) {
   const isDisabled = disabled || loading;
   const displayText = loading && loadingText ? loadingText : title;
+  const canAddMore = usePhotoStore(state => state.canAddMore());
 
   return (
     <TouchableOpacity
       style={[
         style,
-        isDisabled && disabledStyle
+        isDisabled && disabledStyle,
+        !canAddMore && disabledStyle
       ]}
       onPress={onPress}
       disabled={isDisabled}

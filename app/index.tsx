@@ -196,7 +196,7 @@ export default function HomeScreen() {
               <Line x1="198.5" y1="-2.18557e-08" x2="198.5" y2="108" stroke="black"/>
               <Line x1="204.5" y1="-2.18557e-08" x2="204.5" y2="108" stroke="black"/>
               </Svg>
-              <TouchableOpacity 
+              {/* <TouchableOpacity 
                 style={[
                   styles.actionButton,
                   !canAddMore && styles.actionButtonDisabled
@@ -213,7 +213,17 @@ export default function HomeScreen() {
                   USE CAMERA
                 </Text>
                 
-              </TouchableOpacity>
+              </TouchableOpacity> */}
+              <CustomButton
+                title="use camera"
+                onPress={startCameraFlow}
+                disabled={!canAddMore}
+                style={styles.actionButton}
+                textStyle={styles.actionButtonText}
+                disabledStyle={styles.actionButtonDisabled}
+                disabledTextStyle={styles.actionButtonTextDisabled}
+                showArrow={false}
+              />
             </View>
 
 
@@ -255,13 +265,20 @@ export default function HomeScreen() {
                 <Line x1="198.5" y1="-2.18557e-08" x2="198.5" y2="108" stroke="black"/>
                 <Line x1="204.5" y1="-2.18557e-08" x2="204.5" y2="108" stroke="black"/>
               </Svg>
-              <TouchableOpacity 
+              {/* <TouchableOpacity 
                 style={styles.actionButton}
                 onPress={navigateToUploadScreen}
               >
                 <Text style={styles.actionButtonText}>UPLOAD PHOTOS</Text>
                 
-              </TouchableOpacity>
+              </TouchableOpacity> */}
+              <CustomButton
+                title="upload photos"
+                onPress={navigateToUploadScreen}
+                style={styles.actionButton}
+                textStyle={styles.actionButtonText}
+                showArrow={false}
+              />
             </View>
           </View>
         
@@ -544,7 +561,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#000',
     fontFamily: 'grotesk',
-    
+    textTransform: 'uppercase',
+    width: '100%',
   },
   actionButtonTextDisabled: {
     color: '#ccc',
